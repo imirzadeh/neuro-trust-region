@@ -46,7 +46,7 @@ def generate_samples(num_samples_inside, num_samples_boundary, x_k, delta_k):
     return total_samples
 
 
-if __name__ == "__main__":
-    x_k = np.array([0.0], dtype=np.float32)
-    delta_k = 2.0
-    print(generate_samples(5, 3, x_k, delta_k))
+# if __name__ == "__main__":
+#     x_k = np.array([0.0], dtype=np.float32)
+#     delta_k = 2.0
+#     print(generate_samples(5, 3, x_k, delta_k))

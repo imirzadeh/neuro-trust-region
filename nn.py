@@ -29,7 +29,7 @@ def train_single_epoch(net, loader, criterion, optimizer):
 	for batch_idx, (data, target) in enumerate(loader):
 		optimizer.zero_grad()
 		pred = net(data)
-		loss = criterion(pred, target)
+		loss = criterion(pred, target.view(1, -1))
 		loss.backward()
 		optimizer.step()
 	return net
@@ -43,6 +43,6 @@ def eval_single_epoch(net, loader, criterion):
 	with torch.no_grad():
 		for data, target in loader:
 			output = net(data)
-			test_loss += criterion(output, target).item()
+			test_loss += criterion(output, target.view(1, -1)).item()
 	test_loss /= len(loader.dataset)
 	return {'loss': test_loss}
