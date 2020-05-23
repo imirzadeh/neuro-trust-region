@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+from problem import SolverParams
+
+CLIP_VAL = 0.1
+SCALE_N = SolverParams().stability_scale
 
 class MLP(nn.Module):
 	"""
@@ -16,7 +19,8 @@ class MLP(nn.Module):
 	def forward(self, x):
 		out = torch.sigmoid(self.W1(x))
 		out = torch.sigmoid(self.W2(out))
-		return self.W3(out)
+		out = self.W3(out) * SCALE_N
+		return out
 
 
 
@@ -29,8 +33,11 @@ def train_single_epoch(net, loader, criterion, optimizer):
 	for batch_idx, (data, target) in enumerate(loader):
 		optimizer.zero_grad()
 		pred = net(data)
-		loss = criterion(pred, target.view(1, -1))
+		# print(data.shape, pred.shape, target.shape)
+
+		loss = criterion(pred, target)
 		loss.backward()
+		torch.nn.utils.clip_grad_norm_(net.parameters(), CLIP_VAL)
 		optimizer.step()
 	return net
 
@@ -43,6 +50,23 @@ def eval_single_epoch(net, loader, criterion):
 	with torch.no_grad():
 		for data, target in loader:
 			output = net(data)
-			test_loss += criterion(output, target.view(1, -1)).item()
+			test_loss += criterion(output, target).item()
+	test_loss /= len(loader.dataset)
+	return {'loss': test_loss}
+
+def eval_single_epoch_debug(net, loader, criterion):
+	"""
+	Evaluating the neural network for single epoch
+	"""
+	net.eval()
+	test_loss = 0
+	with torch.no_grad():
+		for data, target in loader:
+			output = net(data)
+			print(data)
+			print(output.data)
+			print(target.data)
+			print("**"*10)
+			test_loss += criterion(output, target).item()
 	test_loss /= len(loader.dataset)
 	return {'loss': test_loss}
