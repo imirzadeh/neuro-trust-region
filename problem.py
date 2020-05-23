@@ -1,0 +1,2 @@
+class SolverParams():
+	pass
