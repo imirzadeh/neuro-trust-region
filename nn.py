@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from problem import SolverParams
 
-CLIP_VAL = 0.1
+CLIP_VAL = 0.5#0.25
 SCALE_N = SolverParams().stability_scale
 
 class MLP(nn.Module):
@@ -31,14 +31,14 @@ def train_single_epoch(net, loader, criterion, optimizer):
 	net.train()	
 	
 	for batch_idx, (data, target) in enumerate(loader):
-		optimizer.zero_grad()
-		pred = net(data)
-		# print(data.shape, pred.shape, target.shape)
-
-		loss = criterion(pred, target)
-		loss.backward()
-		torch.nn.utils.clip_grad_norm_(net.parameters(), CLIP_VAL)
-		optimizer.step()
+		def closure():
+			optimizer.zero_grad()
+			pred = net(data)
+			loss = criterion(pred, target)
+			loss.backward()
+			torch.nn.utils.clip_grad_norm_(net.parameters(), CLIP_VAL)
+			return loss
+		optimizer.step(closure)
 	return net
 
 def eval_single_epoch(net, loader, criterion):

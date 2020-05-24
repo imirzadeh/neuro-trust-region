@@ -32,7 +32,8 @@ def generate_samples(num_samples_inside, num_samples_boundary, x_k, delta_k):
     if x_k_dim == 1:
         samples_boundary = np.array([[-1.0], [1.0]])
     else:
-        samples_boundary = np.array([normalize(v) for v in ccdesign(x_k_dim, center=[0 for i in range(x_k_dim)])])
+        res = [normalize(v) for v in ccdesign(x_k_dim, center=[0 for i in range(x_k_dim)])]
+        samples_boundary = np.array(res)
 
     samples_boundary = random.choices(delta_k * samples_boundary + x_k, k=num_samples_boundary)
 
@@ -42,7 +43,9 @@ def generate_samples(num_samples_inside, num_samples_boundary, x_k, delta_k):
     samples_inside = scaled_samples_inside + x_k
 
     # 4. Add directions to the center point x_k to get new candidate points
-    total_samples = np.concatenate((samples_boundary, samples_inside))
+    total_samples = np.concatenate((np.concatenate((samples_boundary, samples_inside)),[[0.0 for i in range(x_k_dim)]]))
+    for i in range(5):
+        total_samples = np.concatenate((total_samples, [[0.0 for i in range(x_k_dim)]]))
     return total_samples
 
 

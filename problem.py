@@ -8,7 +8,7 @@ def bowlـ2d_python(samples):
     """
     result = []
     for s in samples:
-        result.append(s[0]**2 + s[1]**2)
+        result.append([s[0]**2 + s[1]**2])
     return result
 
 def bowl_2d_torch(sample):
@@ -41,36 +41,39 @@ def rosenbrock_2d_python(samples):
 f = rosenbrock_2d_python
 f_torch = rosenbrock_2d_torch
 
+# f = bowlـ2d_python
+# f_torch = bowl_2d_torch
+
 
 class SolverParams():
     # ================= Initial Point =============
-    x_0 = np.array([2, 2], dtype=np.float32)
-    delta_0 = 2
-    num_samples_interior = 90
-    num_samples_boundary  = 10
+    x_0 = np.array([0.5, 0.5], dtype=np.float32)    
+    delta_0 = 0.5
+    num_samples_interior = 82
+    num_samples_boundary  = 18
 
     # ============= SOLVER (1): INTERPOLATION (neural net) params ======
     neural_net_hiddens = [2, 25, 25, 1]
-    interpolation_iterations = 20000
+    interpolation_iterations = 15000
     interpolation_learning_rate = 0.001
-    stability_scale = 1000
+    stability_scale = 1
 
     #============== SOLVER (2):  DIRECTION params ===========
     beta = 0.5                  # for delta_k    loss
     s1 = 0.02                   # for delta_k    loss
     s2 = 2.0                    # for delta_k    loss
 
-    eta = 0.5                    # for agreement  loss
+    eta = 0.8                    # for agreement  loss
 
-    zeta_1 = 0.01                # for cauchy     loss
+    zeta_1 = 1.0                 # for cauchy     loss
     zeta_2 = 0                   # for cauchy     loss
 
 
     gamma_delta = 0.0        # for BNTR Loss  
-    gamma_agr = 0.8      # for BNTR Loss  
-    gamma_cauchy = 0.2           # for BNTR Loss  
-    direction_iterations = 5501
+    gamma_agr = 0.5      # for BNTR Loss  
+    gamma_cauchy = 0.5           # for BNTR Loss  
+    direction_iterations = 5001
     direction_learning_rate = 0.01
 
 if __name__ == "__main__":
-    print(rosenbrock_2d_python([[4, 4]]))
+    print(rosenbrock_2d_python([[0.0, 0.0], [0.5, 0.5]]))
