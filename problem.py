@@ -47,33 +47,40 @@ f_torch = rosenbrock_2d_torch
 
 class SolverParams():
     # ================= Initial Point =============
-    x_0 = np.array([0.5, 0.5], dtype=np.float32)    
+    x_0 = np.array([-1.2, 1.0], dtype=np.float32)    
     delta_0 = 0.5
     num_samples_interior = 82
     num_samples_boundary  = 18
 
     # ============= SOLVER (1): INTERPOLATION (neural net) params ======
-    neural_net_hiddens = [2, 25, 25, 1]
-    interpolation_iterations = 15000
-    interpolation_learning_rate = 0.001
+    neural_net_hiddens = [2, 50, 50, 1]
+    interpolation_iterations = 10000
+    interpolation_learning_rate = 0.05
     stability_scale = 1
 
     #============== SOLVER (2):  DIRECTION params ===========
-    beta = 0.5                  # for delta_k    loss
-    s1 = 0.02                   # for delta_k    loss
-    s2 = 2.0                    # for delta_k    loss
+    # beta = 0.5                  # for delta_k    loss
+    # s1 = 0.02                   # for delta_k    loss
+    # s2 = 2.0                    # for delta_k    loss
 
     eta = 0.8                    # for agreement  loss
 
     zeta_1 = 1.0                 # for cauchy     loss
     zeta_2 = 0                   # for cauchy     loss
 
+    gamma_2_prime = 0.2          # for local loss
+    c = 0.1                      # for local loss
+    gamma_2_double_prime = 0.1   # for local loss
 
-    gamma_delta = 0.0        # for BNTR Loss  
-    gamma_agr = 0.5      # for BNTR Loss  
-    gamma_cauchy = 0.5           # for BNTR Loss  
+
+
+    gamma_delta = 0.1            # for BNTR Loss  
+    gamma_agr = 0.3              # for BNTR Loss  
+    gamma_cauchy = 0.1           # for BNTR Loss  
+    gamma_local = 0.5            # for BNTR Loss
+
     direction_iterations = 5001
-    direction_learning_rate = 0.01
+    direction_learning_rate = 0.05
 
 if __name__ == "__main__":
     print(rosenbrock_2d_python([[0.0, 0.0], [0.5, 0.5]]))

@@ -21,8 +21,8 @@ def get_evals(approx):
         model.load_state_dict(torch.load('./model.pth'))
         model.eval()
     # Make data.
-    X = np.arange(params.x_0[0]-params.delta_0, params.x_0[0]+params.delta_0, 0.025)
-    Y = np.arange(params.x_0[1]-params.delta_0, params.x_0[0]+params.delta_0, 0.025)
+    X = np.arange(params.x_0[0]-params.delta_0, params.x_0[0]+params.delta_0, 0.05)
+    Y = np.arange(params.x_0[1]-params.delta_0, params.x_0[0]+params.delta_0, 0.05)
     X, Y = np.meshgrid(X, Y)
 
     Z=[]
@@ -114,6 +114,7 @@ def plot_trajectory(history_x):
     fig = plt.figure(figsize=(16, 12))
     ax = fig.add_subplot(1, 1, 1)
     X, Y, Z = get_evals(approx=False)
+    print("shapes >>> ", X.shape, Y.shape, Z.shape)
     cp = ax.contour(X, Y, Z, levels=20)
     ax.clabel(cp, inline=True, 
               fontsize=10)
