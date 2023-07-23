@@ -10,6 +10,6 @@ python-dateutil==2.8.1
 pytorch-ranger==0.1.1
 scipy==1.4.1
 six==1.15.0
-torch==1.5.0
+torch==1.13.1
 torch-optimizer==0.0.1a13
 torchvision==0.6.0
